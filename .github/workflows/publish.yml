@@ -1,0 +1,40 @@
+
+name: Publish Class Slides
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Marp CLI
+        run: npm install -g @marp-team/marp-cli
+
+      - name: Build All Slides
+        # -I means "Input Directory"
+        # -o means "Output Directory"
+        # This converts slides/*.md -> public/*.html
+        run: marp -I slides/ -o public/
+
+      # Optional: Copy images to public so they show up
+      # (Only needed if your images are NOT inside the slides folder)
+      - name: Copy Images
+        run: |
+          if [ -d "images" ]; then cp -r images public/; fi
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+
+
