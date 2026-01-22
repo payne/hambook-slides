@@ -26,3 +26,4 @@ class: lead
 ---
 *Based on the [HamStudy.org HamBook](https://hambook.org/tech2022/)*
 
+
